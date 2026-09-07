@@ -23,7 +23,7 @@ export default function LiveControlCenter() {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
 
   // Recovery safe timeout for question_intro -> active
-  const introTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const introTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (session?.quizId) {

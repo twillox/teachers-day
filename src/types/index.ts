@@ -28,6 +28,8 @@ export interface Question {
   correctAnswer: number; // index of correct option (0-3)
   timeLimit: number; // in seconds
   points: number; // base points
+  mediaType?: 'text' | 'image' | 'video' | 'audio';
+  mediaUrl?: string;
   imageUrl?: string;
   createdAt: number;
 }
@@ -47,8 +49,11 @@ export type LiveQuestionState = 'lobby' | 'get_ready' | 'question_intro' | 'acti
 // RTDB Structure for active session
 export interface LiveSessionState {
   status: LiveQuestionState;
+  quizId: string;
   currentQuestionIndex: number;
   currentQuestionId: string | null;
+  currentAttemptId?: string;
+  isPaused?: boolean;
   questionStartedAt: number | null; // Server timestamp (when active starts)
   questionEndsAt: number | null; // Server timestamp
   introEndsAt: number | null; // Server timestamp (when get_ready or intro ends)
