@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 
 interface AnimatedCounterProps {
@@ -12,11 +12,9 @@ interface AnimatedCounterProps {
 export function AnimatedCounter({ from, to, duration = 1.5, delay = 0, className = '' }: AnimatedCounterProps) {
   const count = useMotionValue(from);
   const rounded = useTransform(count, (latest) => Math.round(latest));
-  const [hasStarted, setHasStarted] = useState(false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setHasStarted(true);
       animate(count, to, { duration, ease: "easeOut" });
     }, delay * 1000);
 

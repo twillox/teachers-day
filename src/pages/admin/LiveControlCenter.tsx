@@ -142,12 +142,12 @@ export default function LiveControlCenter() {
               <span>Live Broadcast Preview</span>
               <span>1920x1080 (Scaled)</span>
             </div>
-            <div className="flex-1 relative bg-gray-200 overflow-hidden flex items-center justify-center">
+            <div className="flex-1 relative bg-gray-200 overflow-hidden flex items-center justify-center w-full h-full" style={{ containerType: 'size' as any }}>
               <div 
                 className="absolute w-[1920px] h-[1080px] origin-center" 
-                style={{ transform: 'scale(0.35)' }}
+                style={{ transform: 'scale(calc(min(100cqw / 1920, 100cqh / 1080) * 0.95))' }}
               >
-                <div className="w-full h-full pointer-events-none border-[16px] border-black bg-white">
+                <div className="w-full h-full pointer-events-none border-[16px] border-black bg-white shadow-[32px_32px_0_0_rgba(0,0,0,1)]">
                   <PresentationMode gameCodeProp={gameCode} />
                 </div>
               </div>
