@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { participantService } from '../../services/participantService';
 import { getRandomAvatarId } from '../../utils/avatars';
 
@@ -11,6 +11,15 @@ export default function ParticipantJoin() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const codeParam = params.get('code');
+    if (codeParam) {
+      setGameCode(codeParam.toUpperCase());
+    }
+  }, [location]);
 
   const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -27,6 +27,7 @@
     color: var(--color-primary);
     font-family: 'Inter', system-ui, sans-serif;
     position: relative;
+    overflow-x: hidden;
   }
 
   body::after {

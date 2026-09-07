@@ -34,11 +34,6 @@ export default function LiveControlCenter() {
   useEffect(() => {
     if (session?.status === 'question_intro' && session.introEndsAt) {
       const q = questions[session.currentQuestionIndex];
-      // Don't auto-advance if it's a media question, wait for manual "SHOW OPTIONS" click
-      if (q && q.mediaType && q.mediaType !== 'text') {
-        return;
-      }
-
       const remaining = session.introEndsAt - Date.now();
       if (remaining > 0) {
         if (introTimeoutRef.current) clearTimeout(introTimeoutRef.current);
@@ -60,8 +55,6 @@ export default function LiveControlCenter() {
 
   if (loading) return <div className="min-h-screen bg-[var(--color-pastel-bg)] text-black flex items-center justify-center text-4xl uppercase font-black tracking-widest">LOADING CONTROL ROOM...</div>;
   if (error || !session) return <div className="min-h-screen bg-[var(--color-pastel-bg)] text-red-600 flex items-center justify-center text-5xl font-black uppercase shadow-[8px_8px_0_0_rgba(0,0,0,1)] p-12 bg-white border-8 border-black m-12 text-center">SESSION NOT FOUND</div>;
-
-  const currentQuestion = session.currentQuestionIndex >= 0 ? questions[session.currentQuestionIndex] : null;
 
   const handleStartSession = async () => {
     if (questions.length === 0) return alert("No questions.");
@@ -138,9 +131,9 @@ export default function LiveControlCenter() {
             <div className="flex-1 relative bg-gray-200 overflow-hidden flex items-center justify-center w-full h-full min-h-[300px]" style={{ containerType: 'size' as any }}>
               <div 
                 className="absolute w-[1920px] h-[1080px] origin-center" 
-                style={{ transform: 'scale(calc(min(100cqw / 1920, 100cqh / 1080) * 0.95))' }}
+                style={{ transform: 'scale(calc(min(100cqw / 1920, 100cqh / 1080)))' }}
               >
-                <div className="w-full h-full pointer-events-none border-[16px] border-black bg-white shadow-[32px_32px_0_0_rgba(0,0,0,1)]">
+                <div className="w-full h-full pointer-events-none bg-white">
                   <PresentationMode gameCodeProp={gameCode} />
                 </div>
               </div>
@@ -182,15 +175,9 @@ export default function LiveControlCenter() {
             )}
 
             {session.status === 'question_intro' && (
-              currentQuestion?.mediaType && currentQuestion.mediaType !== 'text' ? (
-                <button onClick={() => liveSessionService.activateQuestion(gameCode, currentQuestion.timeLimit)} className="w-full py-6 bg-[var(--color-pastel-green)] text-black font-black text-3xl uppercase border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)] transition-all animate-pulse">
-                  SHOW OPTIONS
-                </button>
-              ) : (
-                <button disabled className="w-full py-6 bg-gray-200 text-gray-500 font-black text-3xl uppercase border-8 border-gray-400">
-                  INTRODUCING...
-                </button>
-              )
+              <button disabled className="w-full py-6 bg-gray-200 text-gray-500 font-black text-3xl uppercase border-8 border-gray-400">
+                INTRODUCING...
+              </button>
             )}
 
             {session.status === 'active' && (

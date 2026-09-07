@@ -65,7 +65,7 @@ export const liveSessionService = {
       currentQuestionIndex: questionIndex,
       currentQuestionId: questionId,
       currentAttemptId: attemptId,
-      introEndsAt: now + 3000,
+      introEndsAt: now + 5000,
       questionStartedAt: null,
       questionEndsAt: null
     });

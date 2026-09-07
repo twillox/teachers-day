@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getAvatarConfig } from '../../utils/avatars';
 import { AvatarShape } from '../../components/AvatarShape';
 import { AnimatedCounter } from '../../components/AnimatedCounter';
+import { QRCodeSVG } from 'qrcode.react';
 
 export default function PresentationMode({ gameCodeProp }: { gameCodeProp?: string }) {
   const { sessionId } = useParams();
@@ -84,21 +85,26 @@ export default function PresentationMode({ gameCodeProp }: { gameCodeProp?: stri
   const renderContent = () => {
     switch (session.status) {
       case 'lobby':
+        const joinUrl = `${window.location.origin}/join?code=${gameCode}`;
         return (
-          <div className="flex flex-col h-full w-full p-16 relative overflow-hidden bg-[var(--color-pastel-blue)]">
-            
+          <div className="flex flex-col h-full w-full p-8 relative overflow-hidden bg-[var(--color-pastel-blue)]">
             <div className="z-10 absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="flex gap-12 items-center bg-white p-16 border-[16px] border-black shadow-[32px_32px_0px_0px_rgba(0,0,0,1)]">
-                <div className="text-right border-r-[16px] border-black pr-12">
-                  <h1 className="text-8xl font-black uppercase leading-none mb-4 text-black">
-                    The Room<br/>Is Open.
-                  </h1>
-                  <div className="text-5xl uppercase tracking-widest bg-[var(--color-pastel-pink)] text-black border-8 border-black inline-block px-6 py-3 font-black mt-4 shadow-[8px_8px_0_0_rgba(0,0,0,1)]">
-                    tday.test/join
+              <div className="flex gap-12 items-center bg-white p-12 border-[16px] border-black shadow-[32px_32px_0px_0px_rgba(0,0,0,1)]">
+                
+                {/* QR Code Section */}
+                <div className="flex flex-col items-center justify-center border-r-[16px] border-black pr-12">
+                  <div className="bg-white p-4 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] mb-6 pointer-events-auto">
+                    <QRCodeSVG value={joinUrl} size={250} level="H" />
+                  </div>
+                  <div className="text-4xl uppercase tracking-widest bg-[var(--color-pastel-pink)] text-black border-8 border-black inline-block px-6 py-3 font-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] text-center">
+                    SCAN TO JOIN
                   </div>
                 </div>
 
                 <div className="text-center pl-4">
+                  <h1 className="text-7xl font-black uppercase leading-none mb-8 text-black">
+                    The Room<br/>Is Open.
+                  </h1>
                   <div className="text-[12rem] font-black leading-none tracking-widest text-black underline decoration-[16px] decoration-[var(--color-pastel-green)] underline-offset-[24px]">
                     {gameCode}
                   </div>
@@ -259,8 +265,8 @@ export default function PresentationMode({ gameCodeProp }: { gameCodeProp?: stri
           return { ...p, previousScore, displayScore };
         });
 
-        const students = mappedParticipants.filter(p => p.group === 'students').sort((a, b) => b.displayScore - a.displayScore).slice(0, 5);
-        const teachers = mappedParticipants.filter(p => p.group === 'teachers').sort((a, b) => b.displayScore - a.displayScore).slice(0, 5);
+        const students = mappedParticipants.filter(p => p.group === 'students').sort((a, b) => b.displayScore - a.displayScore).slice(0, 10);
+        const teachers = mappedParticipants.filter(p => p.group === 'teachers').sort((a, b) => b.displayScore - a.displayScore).slice(0, 10);
         
         const studentsPreviousTotal = mappedParticipants.filter(p => p.group === 'students').reduce((acc, p) => acc + p.previousScore, 0);
         const studentsCurrentTotal = mappedParticipants.filter(p => p.group === 'students').reduce((acc, p) => acc + p.score, 0);
@@ -269,15 +275,15 @@ export default function PresentationMode({ gameCodeProp }: { gameCodeProp?: stri
         const teachersCurrentTotal = mappedParticipants.filter(p => p.group === 'teachers').reduce((acc, p) => acc + p.score, 0);
 
         return (
-          <div className="flex flex-col h-full p-16 items-center w-full bg-[var(--color-pastel-green)]">
-            <h2 className="text-[6rem] font-black mb-16 text-black tracking-widest uppercase bg-white border-[16px] border-black px-24 py-8 shadow-[24px_24px_0px_0px_rgba(0,0,0,1)]">Standings</h2>
+          <div className="flex flex-col h-full p-8 items-center w-full bg-[var(--color-pastel-green)]">
+            <h2 className="text-5xl font-black mb-8 text-black tracking-widest uppercase bg-white border-[8px] border-black px-16 py-4 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">Standings</h2>
             
             <div className="flex w-full gap-16 max-w-7xl">
               {/* STUDENTS LEADERBOARD */}
               <div className="flex-1 flex flex-col items-center">
-                <div className="mb-8 text-center bg-[var(--color-pastel-blue)] text-black border-[12px] border-black p-8 w-full shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] rotate-[-2deg]">
-                  <h3 className="text-6xl font-black uppercase mb-4 border-b-8 border-black pb-4">Students</h3>
-                  <div className="text-[5rem] font-black text-black bg-white inline-block px-8 py-2 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] mt-4">
+                <div className="mb-4 text-center bg-[var(--color-pastel-blue)] text-black border-[8px] border-black p-4 w-full shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rotate-[-1deg]">
+                  <h3 className="text-4xl font-black uppercase mb-2 border-b-4 border-black pb-2">Students</h3>
+                  <div className="text-4xl font-black text-black bg-white inline-block px-6 py-2 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] mt-2">
                     <AnimatedCounter 
                       from={studentsPreviousTotal} 
                       to={studentsCurrentTotal} 
@@ -286,21 +292,21 @@ export default function PresentationMode({ gameCodeProp }: { gameCodeProp?: stri
                     /> PTS
                   </div>
                 </div>
-                <div className="w-full space-y-6">
+                <div className="w-full space-y-2">
                   <AnimatePresence>
                     {students.map((p, i) => {
                       const avatar = getAvatarConfig(p.avatarId);
                       return (
                         <motion.div 
                           key={p.id} layout initial={{ opacity: 0, x: -100 }} animate={{ opacity: 1, x: 0 }} transition={{ type: "spring", bounce: 0.4, duration: 1 }}
-                          className={`flex justify-between items-center bg-white border-8 p-6 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] ${i === 0 ? 'border-black bg-[var(--color-pastel-yellow)] z-30 scale-105' : 'border-black opacity-90'}`}
+                          className={`flex justify-between items-center bg-white border-4 p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${i === 0 ? 'border-black bg-[var(--color-pastel-yellow)] z-30 scale-[1.02]' : 'border-black opacity-90'}`}
                         >
-                          <div className="flex items-center gap-6">
-                            <div className="w-16 h-16 flex items-center justify-center text-3xl font-black bg-black text-white rounded-full">{i + 1}</div>
-                            <AvatarShape color={avatar.color} size={64} label={p.name} />
-                            <div className="text-4xl font-black uppercase truncate max-w-[200px] text-black">{p.name}</div>
+                          <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 flex items-center justify-center text-xl font-black bg-black text-white rounded-full">{i + 1}</div>
+                            <AvatarShape color={avatar.color} size={36} label={p.name} />
+                            <div className="text-2xl font-black uppercase truncate max-w-[200px] text-black">{p.name}</div>
                           </div>
-                          <div className="text-5xl font-black tabular-nums text-black bg-white border-4 border-black px-4 py-2">
+                          <div className="text-3xl font-black tabular-nums text-black bg-white border-4 border-black px-3 py-1">
                             <AnimatedCounter from={p.previousScore} to={p.score} duration={1.5} delay={leaderboardPhase === 'animated' ? 0 : 9999} />
                           </div>
                         </motion.div>
@@ -312,9 +318,9 @@ export default function PresentationMode({ gameCodeProp }: { gameCodeProp?: stri
 
               {/* TEACHERS LEADERBOARD */}
               <div className="flex-1 flex flex-col items-center">
-                <div className="mb-8 text-center bg-[var(--color-pastel-orange)] text-black border-[12px] border-black p-8 w-full shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] rotate-[2deg]">
-                  <h3 className="text-6xl font-black uppercase mb-4 border-b-8 border-black pb-4">Instructors</h3>
-                  <div className="text-[5rem] font-black text-black bg-white inline-block px-8 py-2 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] mt-4">
+                <div className="mb-4 text-center bg-[var(--color-pastel-orange)] text-black border-[8px] border-black p-4 w-full shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rotate-[1deg]">
+                  <h3 className="text-4xl font-black uppercase mb-2 border-b-4 border-black pb-2">Instructors</h3>
+                  <div className="text-4xl font-black text-black bg-white inline-block px-6 py-2 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] mt-2">
                     <AnimatedCounter 
                       from={teachersPreviousTotal} 
                       to={teachersCurrentTotal} 
@@ -323,21 +329,21 @@ export default function PresentationMode({ gameCodeProp }: { gameCodeProp?: stri
                     /> PTS
                   </div>
                 </div>
-                <div className="w-full space-y-6">
+                <div className="w-full space-y-2">
                   <AnimatePresence>
                     {teachers.map((p, i) => {
                       const avatar = getAvatarConfig(p.avatarId);
                       return (
                         <motion.div 
                           key={p.id} layout initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} transition={{ type: "spring", bounce: 0.4, duration: 1 }}
-                          className={`flex justify-between items-center bg-white border-8 p-6 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] ${i === 0 ? 'border-black bg-[var(--color-pastel-yellow)] z-30 scale-105' : 'border-black opacity-90'}`}
+                          className={`flex justify-between items-center bg-white border-4 p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${i === 0 ? 'border-black bg-[var(--color-pastel-yellow)] z-30 scale-[1.02]' : 'border-black opacity-90'}`}
                         >
-                          <div className="flex items-center gap-6">
-                            <div className="w-16 h-16 flex items-center justify-center text-3xl font-black bg-black text-white rounded-full">{i + 1}</div>
-                            <AvatarShape color={avatar.color} size={64} label={p.name} />
-                            <div className="text-4xl font-black uppercase truncate max-w-[200px] text-black">{p.name}</div>
+                          <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 flex items-center justify-center text-xl font-black bg-black text-white rounded-full">{i + 1}</div>
+                            <AvatarShape color={avatar.color} size={36} label={p.name} />
+                            <div className="text-2xl font-black uppercase truncate max-w-[200px] text-black">{p.name}</div>
                           </div>
-                          <div className="text-5xl font-black tabular-nums text-black bg-white border-4 border-black px-4 py-2">
+                          <div className="text-3xl font-black tabular-nums text-black bg-white border-4 border-black px-3 py-1">
                             <AnimatedCounter from={p.previousScore} to={p.score} duration={1.5} delay={leaderboardPhase === 'animated' ? 0 : 9999} />
                           </div>
                         </motion.div>
