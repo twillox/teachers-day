@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { adminService } from '../../services/adminService';
 import type { Quiz, Question } from '../../types';
+import Papa from 'papaparse';
 
 export default function QuizBuilder() {
   const { quizId } = useParams();
@@ -21,6 +22,95 @@ export default function QuizBuilder() {
   const [points, setPoints] = useState(1000);
   const [mediaType, setMediaType] = useState<'text'|'image'|'video'|'audio'>('text');
   const [mediaUrl, setMediaUrl] = useState('');
+
+  // Bulk Upload state
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+
+  const downloadTemplate = () => {
+    const headers = ['Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer', 'Time Limit', 'Points', 'Media Type', 'Media URL'];
+    const csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" +
+      '"Sample Question","Answer 1","Answer 2","Answer 3","Answer 4","A","20","1000","text",""';
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "quiz_template.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    setUploadError('');
+
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: async (results) => {
+        try {
+          const rows = results.data as any[];
+          let currentOrder = questions.length;
+          
+          for (const row of rows) {
+            const questionText = row['Question'];
+            if (!questionText) continue;
+
+            const opts = [
+              row['Option A'] || '',
+              row['Option B'] || '',
+              row['Option C'] || '',
+              row['Option D'] || ''
+            ];
+
+            const correctStr = (row['Correct Answer'] || 'A').toUpperCase().trim();
+            let cAns = 0;
+            if (correctStr === 'B') cAns = 1;
+            if (correctStr === 'C') cAns = 2;
+            if (correctStr === 'D') cAns = 3;
+
+            const tLimit = parseInt(row['Time Limit']) || 20;
+            const pts = parseInt(row['Points']) || 1000;
+            const mType = (row['Media Type'] || 'text').toLowerCase().trim();
+            const mUrl = row['Media URL'] || '';
+
+            const questionData: any = {
+              quizId,
+              order: currentOrder++,
+              question: questionText,
+              type: 'multiple-choice',
+              mediaType: ['text', 'image', 'video', 'audio'].includes(mType) ? mType : 'text',
+              options: opts,
+              correctAnswer: cAns,
+              timeLimit: tLimit,
+              points: pts
+            };
+
+            if (questionData.mediaType !== 'text' && mUrl) {
+              questionData.mediaUrl = mUrl;
+            }
+
+            await adminService.addQuestion(quizId!, questionData);
+          }
+
+          const qs = await adminService.getQuestions(quizId!);
+          setQuestions(qs);
+        } catch (err: any) {
+          setUploadError(err.message || 'Failed to upload questions');
+        } finally {
+          setIsUploading(false);
+          e.target.value = '';
+        }
+      },
+      error: (error) => {
+        setUploadError(error.message);
+        setIsUploading(false);
+      }
+    });
+  };
 
   useEffect(() => {
     if (!currentUser) {
@@ -73,12 +163,12 @@ export default function QuizBuilder() {
   if (loading) return <div className="p-8 text-black font-black uppercase">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-[var(--color-pastel-pink)] text-black p-8 font-sans">
+    <div className="min-h-screen bg-[var(--color-pastel-pink)] text-black p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto">
-        <header className="mb-12 border-b-8 border-black pb-6 flex justify-between items-end">
+        <header className="mb-8 md:mb-12 border-b-4 md:border-b-8 border-black pb-4 md:pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
             <button onClick={() => navigate('/admin')} className="text-black font-bold uppercase hover:bg-white px-4 py-2 border-4 border-transparent hover:border-black hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)] transition-all mb-4">&larr; Back to Dashboard</button>
-            <h1 className="text-5xl font-black uppercase bg-white px-6 py-3 border-4 border-black shadow-[6px_6px_0_0_rgba(0,0,0,1)] inline-block">{quiz?.title}</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase bg-white px-4 sm:px-6 py-2 sm:py-3 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] md:shadow-[6px_6px_0_0_rgba(0,0,0,1)] inline-block">{quiz?.title}</h1>
           </div>
         </header>
 
@@ -112,12 +202,32 @@ export default function QuizBuilder() {
             </div>
           </div>
 
-          {/* Form */}
-          <div className="bg-white p-8 border-8 border-black shadow-[12px_12px_0_0_rgba(0,0,0,1)] self-start sticky top-8">
-            <h2 className="text-4xl font-black uppercase mb-8 inline-block bg-[var(--color-pastel-orange)] px-4 py-2 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">Add Question</h2>
-            <form onSubmit={handleAddQuestion} className="space-y-6">
+          {/* Form & Upload */}
+          <div className="space-y-8 self-start sticky top-4 md:top-8">
+            
+            {/* Bulk Upload Box */}
+            <div className="bg-[var(--color-pastel-blue)] p-4 sm:p-6 md:p-8 border-4 md:border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] md:shadow-[12px_12px_0_0_rgba(0,0,0,1)]">
+              <h2 className="text-2xl sm:text-3xl font-black uppercase mb-4 inline-block bg-white px-4 py-2 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">Bulk Upload</h2>
+              <div className="space-y-4">
+                <button onClick={downloadTemplate} type="button" className="w-full bg-white border-4 border-black text-black font-bold uppercase py-3 shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] transition-all">
+                  Download CSV Template
+                </button>
+                <div className="relative">
+                  <input type="file" accept=".csv" onChange={handleFileUpload} disabled={isUploading} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed" />
+                  <div className={`w-full border-4 border-black text-black font-black uppercase py-4 text-center transition-all ${isUploading ? 'bg-gray-300' : 'bg-[var(--color-pastel-green)] hover:translate-y-1 shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)]'}`}>
+                    {isUploading ? 'Uploading...' : 'Upload Filled CSV'}
+                  </div>
+                </div>
+                {uploadError && <div className="bg-[var(--color-pastel-pink)] text-black font-bold p-3 border-4 border-black uppercase text-sm mt-2">{uploadError}</div>}
+              </div>
+            </div>
+
+            {/* Manual Form */}
+            <div className="bg-white p-4 sm:p-6 md:p-8 border-4 md:border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] md:shadow-[12px_12px_0_0_rgba(0,0,0,1)]">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase mb-6 md:mb-8 inline-block bg-[var(--color-pastel-orange)] px-4 py-2 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">Add Question</h2>
+              <form onSubmit={handleAddQuestion} className="space-y-4 sm:space-y-6">
               
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1">
                   <label className="block text-xl font-black uppercase mb-2">Media Type</label>
                   <select
@@ -184,7 +294,7 @@ export default function QuizBuilder() {
                 ))}
               </div>
 
-              <div className="flex gap-6 pt-6">
+              <div className="flex flex-col sm:flex-row gap-4 md:gap-6 pt-4 md:pt-6">
                 <div className="flex-1">
                   <label className="block text-xl font-black uppercase mb-2">Time Limit (s)</label>
                   <input
@@ -211,6 +321,7 @@ export default function QuizBuilder() {
                 ADD QUESTION
               </button>
             </form>
+            </div>
           </div>
         </div>
       </div>

@@ -50,18 +50,18 @@ export default function AdminDashboard() {
   if (loading) return <div className="p-8 text-white">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-[var(--color-pastel-blue)] text-black p-8 font-sans">
+    <div className="min-h-screen bg-[var(--color-pastel-blue)] text-black p-4 md:p-8 font-sans">
       <div className="max-w-6xl mx-auto">
-        <header className="flex justify-between items-center mb-12 border-b-8 border-black pb-6">
-          <h1 className="text-4xl font-black uppercase text-black bg-white px-4 py-2 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">TDAY Admin</h1>
-          <button onClick={handleLogout} className="flex items-center text-black font-bold uppercase hover:bg-white px-4 py-2 border-4 border-transparent hover:border-black hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)] transition-all">
+        <header className="flex flex-col md:flex-row justify-between items-center md:items-end mb-8 md:mb-12 border-b-4 md:border-b-8 border-black pb-4 md:pb-6 gap-4">
+          <h1 className="text-3xl md:text-4xl font-black uppercase text-black bg-white px-4 py-2 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] text-center w-full md:w-auto">TDAY Admin</h1>
+          <button onClick={handleLogout} className="flex justify-center w-full md:w-auto items-center text-black font-bold uppercase hover:bg-white px-4 py-2 border-4 border-transparent hover:border-black hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)] transition-all">
             <LogOut className="w-5 h-5 mr-2" /> Logout
           </button>
         </header>
 
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-4xl font-black uppercase bg-white px-4 py-2 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">Your Quizzes</h2>
-          <button onClick={handleCreateQuiz} className="flex items-center bg-[var(--color-pastel-green)] text-black px-6 py-3 border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] font-black uppercase hover:translate-y-1 hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)] transition-all">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-8 gap-4">
+          <h2 className="text-2xl md:text-4xl font-black uppercase bg-white px-4 py-2 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] w-full md:w-auto text-center">Your Quizzes</h2>
+          <button onClick={handleCreateQuiz} className="flex justify-center w-full md:w-auto items-center bg-[var(--color-pastel-green)] text-black px-6 py-3 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] md:shadow-[8px_8px_0_0_rgba(0,0,0,1)] font-black uppercase hover:translate-y-1 hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] transition-all">
             <Plus className="w-6 h-6 mr-2" /> New Quiz
           </button>
         </div>

@@ -108,7 +108,7 @@ export default function ParticipantGame() {
       case 'lobby':
         return (
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center justify-center h-full w-full">
-            <h1 className="text-[4rem] font-black uppercase mb-12">You're In.</h1>
+            <h1 className="text-4xl sm:text-[4rem] font-black uppercase mb-8 sm:mb-12 text-center">You're In.</h1>
             <div className="bg-white border-8 border-black rounded-full shadow-[8px_8px_0_0_rgba(0,0,0,1)] mb-8">
               <AvatarShape 
                 color={avatar.color} 
@@ -116,8 +116,8 @@ export default function ParticipantGame() {
                 label={identity.name} 
               />
             </div>
-            <h2 className="text-5xl font-black uppercase mb-8">{identity.name}</h2>
-            <div className="bg-[var(--color-pastel-yellow)] border-8 border-black px-6 py-4 font-black text-2xl uppercase tracking-widest shadow-[8px_8px_0_0_rgba(0,0,0,1)] text-center">
+            <h2 className="text-3xl sm:text-5xl font-black uppercase mb-6 sm:mb-8 text-center">{identity.name}</h2>
+            <div className="bg-[var(--color-pastel-yellow)] border-4 sm:border-8 border-black px-4 sm:px-6 py-3 sm:py-4 font-black text-xl sm:text-2xl uppercase tracking-widest shadow-[4px_4px_0_0_rgba(0,0,0,1)] sm:shadow-[8px_8px_0_0_rgba(0,0,0,1)] text-center">
               Waiting for Host
             </div>
           </motion.div>
@@ -126,7 +126,7 @@ export default function ParticipantGame() {
       case 'get_ready':
         return (
           <motion.div key="ready" initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 1.5, opacity: 0 }} className="flex flex-col items-center justify-center h-full">
-            <h1 className="text-6xl font-black uppercase tracking-tighter text-black bg-white px-8 py-6 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] rotate-[-5deg]">Get Ready</h1>
+            <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tighter text-black bg-white px-6 sm:px-8 py-4 sm:py-6 border-4 sm:border-8 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] sm:shadow-[8px_8px_0_0_rgba(0,0,0,1)] rotate-[-5deg] text-center">Get Ready</h1>
           </motion.div>
         );
 
@@ -145,7 +145,7 @@ export default function ParticipantGame() {
                 <div className="text-black bg-[var(--color-pastel-yellow)] font-black text-2xl mb-6 border-4 border-black px-6 py-2 shadow-[4px_4px_0_0_rgba(0,0,0,1)] inline-block">
                   Q{session.currentQuestionIndex + 1}
                 </div>
-                <h2 className="text-4xl font-black uppercase leading-tight">{question?.question}</h2>
+                <h2 className="text-2xl sm:text-4xl font-black uppercase leading-tight">{question?.question}</h2>
               </div>
             )}
           </motion.div>
@@ -155,7 +155,7 @@ export default function ParticipantGame() {
         return (
           <motion.div key="active" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col h-full w-full justify-between pb-8">
             <div className="flex justify-between items-end mb-6 pt-4 border-b-8 border-black pb-4">
-              <div className="text-5xl font-black">{countdown}s</div>
+              <div className="text-4xl sm:text-5xl font-black">{countdown}s</div>
               <div className="w-2/3 h-8 bg-white border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
                 <motion.div 
                   initial={{ width: "100%" }}
@@ -208,7 +208,7 @@ export default function ParticipantGame() {
       case 'closed':
         return (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center h-full">
-            <h1 className="text-6xl font-black uppercase tracking-tighter text-black bg-[var(--color-pastel-orange)] px-8 py-6 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] rotate-[5deg]">Time's Up</h1>
+            <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tighter text-black bg-[var(--color-pastel-orange)] px-6 sm:px-8 py-4 sm:py-6 border-4 sm:border-8 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] sm:shadow-[8px_8px_0_0_rgba(0,0,0,1)] rotate-[5deg] text-center">Time's Up</h1>
           </motion.div>
         );
 
@@ -221,7 +221,7 @@ export default function ParticipantGame() {
         return (
           <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="flex flex-col items-center justify-center h-full w-full">
             <div className={`w-full border-8 p-12 text-center shadow-[12px_12px_0_0_rgba(0,0,0,1)] ${lastResult.isCorrect ? 'bg-[var(--color-pastel-green)] border-black text-black' : 'bg-[var(--color-pastel-pink)] border-black text-black'}`}>
-              <h2 className="text-[4rem] font-black uppercase mb-6">{lastResult.isCorrect ? 'Correct' : 'Wrong'}</h2>
+              <h2 className="text-3xl sm:text-[4rem] font-black uppercase mb-6">{lastResult.isCorrect ? 'Correct' : 'Wrong'}</h2>
               {lastResult.isCorrect && (
                 <div className="text-4xl font-black bg-white text-black inline-block px-6 py-2 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
                   +{lastResult.points}
@@ -240,7 +240,7 @@ export default function ParticipantGame() {
             <h1 className="text-3xl font-black uppercase text-center mb-8 bg-white border-4 border-black px-4 py-2 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
               {identity.group === 'students' ? 'Student' : 'Instructor'} Standings
             </h1>
-            <div className="text-[6rem] font-black text-black bg-[var(--color-pastel-yellow)] border-8 border-black p-8 shadow-[8px_8px_0_0_rgba(0,0,0,1)] rotate-[-2deg]">#{myRank > 0 ? myRank : '-'}</div>
+            <div className="text-6xl sm:text-[6rem] font-black text-black bg-[var(--color-pastel-yellow)] border-4 sm:border-8 border-black p-6 sm:p-8 shadow-[4px_4px_0_0_rgba(0,0,0,1)] sm:shadow-[8px_8px_0_0_rgba(0,0,0,1)] rotate-[-2deg]">#{myRank > 0 ? myRank : '-'}</div>
             <div className="text-2xl font-black uppercase mt-6 bg-white px-4 py-2 border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] rotate-[2deg]">Your Rank</div>
           </motion.div>
         );
@@ -253,7 +253,7 @@ export default function ParticipantGame() {
         
         return (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center h-full">
-            <h1 className={`text-5xl font-black uppercase text-center p-8 border-8 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] ${myGroupWon ? 'bg-[var(--color-pastel-yellow)] text-black' : 'bg-gray-200 text-gray-500'}`}>
+            <h1 className={`text-3xl sm:text-5xl font-black uppercase text-center p-6 sm:p-8 border-4 sm:border-8 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] sm:shadow-[8px_8px_0_0_rgba(0,0,0,1)] ${myGroupWon ? 'bg-[var(--color-pastel-yellow)] text-black' : 'bg-gray-200 text-gray-500'}`}>
               {winningGroup === 'tie' ? "It's a Tie!" : myGroupWon ? 'Your Group Won!' : 'Your Group Lost!'}
             </h1>
           </motion.div>

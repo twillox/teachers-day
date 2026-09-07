@@ -104,28 +104,28 @@ export default function LiveControlCenter() {
     <div className="min-h-screen bg-[var(--color-pastel-bg)] text-black p-6 font-sans flex flex-col h-screen overflow-hidden">
       
       {/* HEADER */}
-      <header className="flex justify-between items-center mb-6 border-8 border-black p-6 bg-white shadow-[8px_8px_0_0_rgba(0,0,0,1)]">
-        <div className="flex items-center gap-8">
-          <div className="bg-[var(--color-pastel-pink)] text-black font-black px-6 py-3 uppercase tracking-widest flex items-center gap-3 border-4 border-black">
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-8 border-black p-4 md:p-6 bg-white shadow-[8px_8px_0_0_rgba(0,0,0,1)] gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 w-full md:w-auto">
+          <div className="bg-[var(--color-pastel-pink)] text-black font-black px-4 md:px-6 py-2 md:py-3 uppercase tracking-widest flex items-center gap-3 border-4 border-black w-full sm:w-auto justify-center">
             <span className="w-4 h-4 bg-red-600 rounded-full animate-pulse border-2 border-black"></span>
             ON AIR
           </div>
           <h1 className="text-4xl font-black uppercase text-black">{quiz?.title || 'Live Event'}</h1>
         </div>
-        <div className="flex gap-16 text-right">
+        <div className="flex gap-8 md:gap-16 text-left md:text-right w-full md:w-auto justify-between md:justify-end border-t-4 md:border-t-0 border-black pt-4 md:pt-0 mt-2 md:mt-0">
           <div>
-            <div className="text-lg font-bold text-gray-600 uppercase tracking-widest">Game Code</div>
-            <div className="text-5xl font-black text-black">{gameCode}</div>
+            <div className="text-sm md:text-lg font-bold text-gray-600 uppercase tracking-widest">Game Code</div>
+            <div className="text-3xl md:text-5xl font-black text-black">{gameCode}</div>
           </div>
           <div>
-            <div className="text-lg font-bold text-gray-600 uppercase tracking-widest">Participants</div>
-            <div className="text-5xl font-black text-black">{participants.length}</div>
+            <div className="text-sm md:text-lg font-bold text-gray-600 uppercase tracking-widest">Participants</div>
+            <div className="text-3xl md:text-5xl font-black text-black">{participants.length}</div>
           </div>
         </div>
       </header>
 
       {/* MAIN LAYOUT */}
-      <div className="flex flex-1 gap-6 overflow-hidden">
+      <div className="flex flex-col lg:flex-row flex-1 gap-6 overflow-y-auto lg:overflow-hidden pb-8 lg:pb-0">
         
         {/* LEFT COLUMN: LIVE PREVIEW & STATS */}
         <div className="flex-1 flex flex-col gap-6">
@@ -135,7 +135,7 @@ export default function LiveControlCenter() {
               <span>Live Broadcast Preview</span>
               <span>1920x1080 (Scaled)</span>
             </div>
-            <div className="flex-1 relative bg-gray-200 overflow-hidden flex items-center justify-center w-full h-full" style={{ containerType: 'size' as any }}>
+            <div className="flex-1 relative bg-gray-200 overflow-hidden flex items-center justify-center w-full h-full min-h-[300px]" style={{ containerType: 'size' as any }}>
               <div 
                 className="absolute w-[1920px] h-[1080px] origin-center" 
                 style={{ transform: 'scale(calc(min(100cqw / 1920, 100cqh / 1080) * 0.95))' }}
@@ -156,7 +156,7 @@ export default function LiveControlCenter() {
         </div>
 
         {/* RIGHT COLUMN: CONTROL PANEL */}
-        <div className="w-[450px] bg-white border-8 border-black flex flex-col shadow-[12px_12px_0_0_rgba(0,0,0,1)]">
+        <div className="w-full lg:w-[450px] bg-white border-8 border-black flex flex-col shadow-[12px_12px_0_0_rgba(0,0,0,1)] shrink-0 h-auto lg:h-full min-h-[500px]">
           <div className="bg-[var(--color-pastel-yellow)] border-b-8 border-black text-black font-black uppercase px-6 py-4 text-2xl text-center">
             Switcher Controls
           </div>
