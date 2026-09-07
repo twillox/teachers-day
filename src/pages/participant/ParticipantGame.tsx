@@ -59,7 +59,7 @@ export default function ParticipantGame() {
     setIsSubmitting(true);
     
     try {
-      const result = await participantService.submitAnswer(
+      const result: any = await participantService.submitAnswer(
         gameCode as string, 
         identity.id, 
         session.currentQuestionId!, 

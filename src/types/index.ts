@@ -48,6 +48,7 @@ export type LiveQuestionState = 'lobby' | 'get_ready' | 'question_intro' | 'acti
 
 // RTDB Structure for active session
 export interface LiveSessionState {
+  sessionId: string;
   status: LiveQuestionState;
   quizId: string;
   currentQuestionIndex: number;

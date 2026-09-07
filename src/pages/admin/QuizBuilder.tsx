@@ -23,7 +23,10 @@ export default function QuizBuilder() {
   const [mediaUrl, setMediaUrl] = useState('');
 
   useEffect(() => {
-    if (!currentUser) return navigate('/admin/login');
+    if (!currentUser) {
+      navigate('/admin/login');
+      return;
+    }
     if (quizId) {
       Promise.all([
         adminService.getQuiz(quizId),

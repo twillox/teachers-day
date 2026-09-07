@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { useLiveSession } from '../../hooks/useLiveSession';
 import { useParticipants } from '../../hooks/useParticipants';
@@ -12,7 +12,6 @@ import PresentationMode from '../presentation/PresentationMode';
 export default function LiveControlCenter() {
   const { sessionId } = useParams(); 
   const gameCode = sessionId as string;
-  const navigate = useNavigate();
   const { currentUser } = useAuth();
   
   const { session, loading, error } = useLiveSession(gameCode);
@@ -79,13 +78,7 @@ export default function LiveControlCenter() {
     await liveSessionService.startQuestionIntro(gameCode, nextIndex, q.id, attemptId);
   };
 
-  const handleNextQuestion = async () => {
-    const nextIndex = session.currentQuestionIndex + 1;
-    if (nextIndex >= questions.length) {
-      return liveSessionService.transitionToFinishedGroup(gameCode);
-    }
-    await liveSessionService.transitionToGetReady(gameCode);
-  };
+
 
   const handleStartQuestionNext = async () => {
     const nextIndex = session.currentQuestionIndex + 1;

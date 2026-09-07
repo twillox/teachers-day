@@ -1,4 +1,4 @@
-import { collection, doc, setDoc, getDocs, getDoc, updateDoc, deleteDoc, addDoc, serverTimestamp, query, where, orderBy } from 'firebase/firestore';
+import { collection, doc, getDocs, getDoc, updateDoc, addDoc, query, orderBy } from 'firebase/firestore';
 import { db, auth } from '../firebase/config';
 import type { Quiz, Question } from '../types';
 

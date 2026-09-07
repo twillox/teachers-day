@@ -1,4 +1,4 @@
-import { ref, update, set, get, serverTimestamp } from 'firebase/database';
+import { ref, update, set, serverTimestamp } from 'firebase/database';
 import { collection, addDoc, doc, updateDoc } from 'firebase/firestore';
 import { rtdb, db, auth } from '../firebase/config';
 import type { LiveQuestionState } from '../types';
@@ -50,7 +50,6 @@ export const liveSessionService = {
 
   async transitionToGetReady(gameCode: string) {
     const rtdbSessionRef = ref(rtdb, `live_sessions/${gameCode}`);
-    const now = Date.now();
     await update(rtdbSessionRef, {
       status: 'get_ready',
       introEndsAt: serverTimestamp(), // Just an immediate jump, but we can set it to +3s if we want to synchronize. The client will handle 3-2-1 visually anyway.

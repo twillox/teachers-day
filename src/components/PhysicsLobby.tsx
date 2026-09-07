@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Matter from 'matter-js';
 import { getAvatarConfig } from '../utils/avatars';
 import type { Participant } from '../types';
