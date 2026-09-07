@@ -40,18 +40,22 @@ export default function QuizBuilder() {
     e.preventDefault();
     if (!quizId) return;
     
-    await adminService.addQuestion(quizId, {
+    const questionData: any = {
       quizId,
       order: questions.length,
       question: questionText,
       type: 'multiple-choice',
       mediaType,
-      mediaUrl: mediaType !== 'text' ? mediaUrl : undefined,
       options,
       correctAnswer,
       timeLimit,
       points
-    });
+    };
+    if (mediaType !== 'text') {
+      questionData.mediaUrl = mediaUrl;
+    }
+
+    await adminService.addQuestion(quizId, questionData);
 
     // Refresh
     setQuestionText('');
